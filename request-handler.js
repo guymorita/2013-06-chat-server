@@ -9,6 +9,7 @@ var defaultCorsHeaders = {
   "access-control-allow-headers": "content-type, accept",
   "access-control-max-age": 10 // Seconds.
 };
+
 var input = '';
 
 exports.handleRequest = function(request, response) {
@@ -23,16 +24,20 @@ exports.handleRequest = function(request, response) {
       input += data;
     });
     request.on('end', function(data){
-      response.write(input);
       console.log(input);
-      response.end();
+      // response.write(input);
+      response.end(input);
     });
-     // response.end(input);
   } else if (request.method === 'GET') {
-    if(request.url !== 'classes/messages'){
+    console.log('URL HERE', request.url);
+    if(request.url !== 'classes/messages' && request.url !== 'http://127.0.0.1:8081/classes/room1'){
       statusCode = 404;
       response.writeHead(statusCode, headers);
+    } else {
+      statusCode = 200;
+      response.writeHead(statusCode, headers);
     }
+
     response.end('[' + input + ']');
     input = '';
   }
