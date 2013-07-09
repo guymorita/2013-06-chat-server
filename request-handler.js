@@ -3,6 +3,9 @@
  * basic-server.js.  So you must figure out how to export the function
  * from this file and include it in basic-server.js. Check out the
  * node module documentation at http://nodejs.org/api/modules.html. */
+var fs = require("fs");
+
+
 var defaultCorsHeaders = {
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -13,41 +16,54 @@ var defaultCorsHeaders = {
 var input = [];
 
 exports.handleRequest = function(request, response) {
-  console.log(request.method);
   var statusCode;
   var headers = defaultCorsHeaders;
   headers['Content-Type'] = "text/plain";
   if(request.method === 'POST'){
-    console.log("handing post!");
     statusCode = 201;
     response.writeHead(statusCode, headers);
     request.on('data', function(data){
-      // console.log(data);
-      // input += data;
       input.push(JSON.parse(data));
     });
     request.on('end', function(){
-      // console.log(input);
-      // response.write(input);
       response.end();
     });
   } else if (request.method === 'GET') {
-    console.log('URL HERE', request.url);
-    if(request.url !== '/classes/messages' && request.url !== 'http://127.0.0.1:8081/classes/room1'){
-      statusCode = 404;
-      response.writeHead(statusCode, headers);
-    } else {
+      // statusCode = 404;
+      // response.writeHead(statusCode, headers);
+      console.log(request.url);
       statusCode = 200;
       response.writeHead(statusCode, headers);
-      console.log('Response 200');
-    }
+      if (request.url === "/"){
+        var contents = fs.readFileSync('./2013-06-chat-client/index.html');
+          response.writeHead(200, { 'content-type': 'text/html'});
+          response.end(contents);
+      } else if (request.url === '/css/reset.css'){
+        var resetcss = fs.readFileSync('./2013-06-chat-client/css/reset.css');
+          response.writeHead(200, { 'content-type': 'text/css'});
+          response.end(resetcss);
+      } else if (request.url === '/css/styles.css'){
+        var stylescss = fs.readFileSync('./2013-06-chat-client/css/styles.css');
+          response.writeHead(200, { 'content-type': 'text/css'});
+          response.end(stylescss);
+      } else if (request.url === '/js/setup.js'){
+        var setupjs = fs.readFileSync('./2013-06-chat-client/js/setup.js');
+          response.writeHead(200, { 'content-type': 'text/javascript'});
+          response.end(setupjs);
+      } else if (request.url === '/js/backbone.js'){
+        var backbonejs = fs.readFileSync('./2013-06-chat-client/js/backbone.js');
+          response.writeHead(200, { 'content-type': 'text/javascript'});
+          response.end(backbonejs);
+      } else if (request.url === '/vendor/jquery/jquery-1.9.1.js'){
+        var jquery = fs.readFileSync('./2013-06-chat-client/vendor/jquery/jquery-1.9.1.js');
+          response.writeHead(200, { 'content-type': 'text/javascript'});
+          response.end(jquery);
+      }
+
     response.end(JSON.stringify(input));
-    // input = '';
   } else if (request.method === 'OPTIONS') {
     headers["access-control-allow-origin"] = "*";
     headers["access-control-allow-methods"] = "POST, GET, PUT, DELETE, OPTIONS";
-    // headers["Access-Control-Allow-Credentials"] = false;
-    // headers["Access-Control-Max-Age"] = '86400'; // 24 hours
     headers["access-control-allow-headers"] = "content-type, accept";
     response.writeHead(200, headers);
     response.end();

@@ -1,5 +1,7 @@
 /* Import node's http module: */
 var http = require("http"),
+  connect = require('connect'),
+  fs = require("fs"),
   requests = require("./request-handler.js");
   // console.log(requests.x);
 
@@ -68,6 +70,9 @@ var ip = "127.0.0.1";
 var server = http.createServer(requests.handleRequest);
 console.log("Listening on http://" + ip + ":" + port);
 server.listen(port, ip);
+// connect.createServer(
+//   connect.static('./2013-06-chat-client/')
+//   ).listen(8080);
 
 /* To start this server, run:
      node basic-server.js
