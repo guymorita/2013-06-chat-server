@@ -11,7 +11,7 @@ var defaultCorsHeaders = {
 };
 var input = '';
 
-var handleRequest = function(request, response) {
+exports.handleRequest = function(request, response) {
   var statusCode;
   var headers = defaultCorsHeaders;
   headers['Content-Type'] = "text/plain";
@@ -20,32 +20,21 @@ var handleRequest = function(request, response) {
     statusCode = 201;
     response.writeHead(statusCode, headers);
     request.on('data', function(data){
-      // gather data
-      // input.push(data);
       input += data;
-      // console.log(input);
-      // console.log(request);
-      // console.log('response', response);
     });
     request.on('end', function(data){
       response.write(input);
       console.log(input);
-      // parse the gathered data
-      // store the message somewhere
-      // unshift something and push to some array
       response.end();
     });
-    // response.end(input);
+     // response.end(input);
   } else if (request.method === 'GET') {
     if(request.url !== 'classes/messages'){
       statusCode = 404;
       response.writeHead(statusCode, headers);
     }
     response.end('[' + input + ']');
+    input = '';
   }
-  // // console.log('request', request);
-  // var statusCode = 200;
-  // console.log('response', response);
 };
 
-exports.handle = handleRequest;
