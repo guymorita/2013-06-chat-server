@@ -10,9 +10,10 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
-var input = '';
+var input = [];
 
 exports.handleRequest = function(request, response) {
+  console.log(request.method);
   var statusCode;
   var headers = defaultCorsHeaders;
   headers['Content-Type'] = "text/plain";
@@ -21,25 +22,35 @@ exports.handleRequest = function(request, response) {
     statusCode = 201;
     response.writeHead(statusCode, headers);
     request.on('data', function(data){
-      input += data;
+      // console.log(data);
+      // input += data;
+      input.push(JSON.parse(data));
     });
-    request.on('end', function(data){
-      console.log(input);
+    request.on('end', function(){
+      // console.log(input);
       // response.write(input);
-      response.end(input);
+      response.end();
     });
   } else if (request.method === 'GET') {
     console.log('URL HERE', request.url);
-    if(request.url !== 'classes/messages' && request.url !== 'http://127.0.0.1:8081/classes/room1'){
+    if(request.url !== '/classes/messages' && request.url !== 'http://127.0.0.1:8081/classes/room1'){
       statusCode = 404;
       response.writeHead(statusCode, headers);
     } else {
       statusCode = 200;
       response.writeHead(statusCode, headers);
+      console.log('Response 200');
     }
-
-    response.end('[' + input + ']');
-    input = '';
+    response.end(JSON.stringify(input));
+    // input = '';
+  } else if (request.method === 'OPTIONS') {
+    headers["access-control-allow-origin"] = "*";
+    headers["access-control-allow-methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+    // headers["Access-Control-Allow-Credentials"] = false;
+    // headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+    headers["access-control-allow-headers"] = "content-type, accept";
+    response.writeHead(200, headers);
+    response.end();
   }
 };
 
