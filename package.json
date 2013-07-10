@@ -1,0 +1,21 @@
+{
+  "name": "chatserveryo",
+  "version": "0.0.0",
+  "_id": "node@0.0.0",
+  "readme": "ERROR: No README.md file found!",
+  "description": "ERROR: No README.md file found!",
+  "dist": {
+    "shasum": "fb9bbdcc8d86ab41c80f2a704d37e856b8cb0061"
+  },
+  "dependencies": {
+    "connect": "2.8.x",
+    "node-fs": "0.1.x",
+    "express": "3.3.4"
+  },
+  "engines": {
+    "node": "0.10.13",
+    "npm": "1.2.30"
+  },
+  "deprecated": "To update or install node, go to http://nodejs.org/",
+  "_from": "node"
+}
