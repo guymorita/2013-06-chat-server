@@ -68,7 +68,7 @@ var port = process.env.PORT || 8081;
 /* Use node's http module to create a server and start it listening on
  * the given port and IP. */
 var server = http.createServer(requests.handleRequest);
-console.log("Listening on http://" + ip + ":" + port);
+console.log("Listening on http://" + ":" + port);
 server.listen(port);
 // connect.createServer(
 //   connect.static('./2013-06-chat-client/')
