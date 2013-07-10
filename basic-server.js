@@ -58,18 +58,18 @@ var defaultCorsHeaders = {
  * normally already claimed by another server and/or not accessible to
  * user processes, so we'll use a higher port number that is not
  * likely to be taken: */
-var port = 8081;
+var port = process.env.PORT || 8081;
 
 /* For now, since you're running this server on your local machine,
  * we'll have it listen on the IP address 127.0.0.1, which is a
  * special address that always refers to localhost. */
-var ip = "127.0.0.1";
+// var ip = "127.0.0.1";
 
 /* Use node's http module to create a server and start it listening on
  * the given port and IP. */
 var server = http.createServer(requests.handleRequest);
 console.log("Listening on http://" + ip + ":" + port);
-server.listen(port, ip);
+server.listen(port);
 // connect.createServer(
 //   connect.static('./2013-06-chat-client/')
 //   ).listen(8080);
