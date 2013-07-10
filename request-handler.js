@@ -13,25 +13,22 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
-var input = [];
-
 exports.handleRequest = function(request, response) {
   var statusCode;
   var headers = defaultCorsHeaders;
   headers['Content-Type'] = "text/plain";
   if(request.method === 'POST'){
+    console.log('post', request.url);
     statusCode = 201;
     response.writeHead(statusCode, headers);
     request.on('data', function(data){
-      input.push(JSON.parse(data));
+      fs.writeFileSync('message.txt', data);
     });
     request.on('end', function(){
       response.end();
     });
   } else if (request.method === 'GET') {
-      // statusCode = 404;
-      // response.writeHead(statusCode, headers);
-      console.log(request.url);
+      console.log('get', request.url);
       statusCode = 200;
       response.writeHead(statusCode, headers);
       if (request.url === "/"){
@@ -59,8 +56,9 @@ exports.handleRequest = function(request, response) {
           response.writeHead(200, { 'content-type': 'text/javascript'});
           response.end(jquery);
       }
-
-    response.end(JSON.stringify(input));
+      var readfiles = fs.readFileSync('message.txt', 'utf8');
+      console.log(readfiles);
+      response.end(readfiles);
   } else if (request.method === 'OPTIONS') {
     headers["access-control-allow-origin"] = "*";
     headers["access-control-allow-methods"] = "POST, GET, PUT, DELETE, OPTIONS";
